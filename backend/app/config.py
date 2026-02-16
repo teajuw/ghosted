@@ -13,11 +13,7 @@ class Settings(BaseSettings):
 
     # API Keys
     sapling_api_key: str = ""
-    groq_api_key: str = ""
     hf_api_token: str = ""
-
-    # Groq
-    groq_model: str = "llama-3.1-8b-instant"
 
     # Limits
     max_text_length_scan: int = 50_000

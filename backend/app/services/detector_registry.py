@@ -67,12 +67,13 @@ def _init_registry() -> DetectorRegistry:
     from app.config import settings
     from app.services.detectors.sapling import SaplingDetector
     from app.services.detectors.hf_roberta import HFRobertaDetector
-    from app.services.detectors.groq_llama import GroqStylisticDetector, GroqStructuralDetector
 
     registry = DetectorRegistry()
 
-    # Tier 1: Primary
+    # Primary: Sapling (SOTA, sentence-level scores)
     registry.register(SaplingDetector(api_key=settings.sapling_api_key))
+
+    # Fallback: COAI RoBERTa (trained on modern LLMs)
     registry.register(
         HFRobertaDetector(
             name="hf_roberta_coai",
@@ -82,7 +83,7 @@ def _init_registry() -> DetectorRegistry:
         )
     )
 
-    # Tier 2: Supplementary
+    # Baseline: OpenAI RoBERTa (older, shows how dated detectors compare)
     registry.register(
         HFRobertaDetector(
             name="hf_roberta_openai",
@@ -91,7 +92,5 @@ def _init_registry() -> DetectorRegistry:
             api_token=settings.hf_api_token,
         )
     )
-    registry.register(GroqStylisticDetector(api_key=settings.groq_api_key))
-    registry.register(GroqStructuralDetector(api_key=settings.groq_api_key))
 
     return registry
